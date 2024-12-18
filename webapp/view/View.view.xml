@@ -1,0 +1,268 @@
+<mvc:View
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    controllerName="soluvia.controller.View"
+    xmlns:f="sap.f"
+    xmlns:c="sap.ui.core"
+    id="IdView"
+    height="100%"
+>
+    <f:DynamicPage
+        id="dynamicPageId"
+        headerExpanded="{/headerExpanded}"
+        toggleHeaderOnTitleClick="{/titleClickable}"
+    >
+        <!-- DynamicPage Title -->
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="{i18n>userTasksTileTitle}" />
+                </f:heading>
+                <f:content>
+                    <OverflowToolbar>
+                        <!-- Waiting -->
+                        <GenericTag
+                            text="{i18n>CountTag}"
+                            status="Information"
+                            design="StatusIconHidden"
+                            id="idCountTag"
+                        >
+                            <ObjectNumber
+                                number="{statusModel>/numberOfLines}"
+                                unit="{i18n>TaskUnit}"
+                                emphasized="false"
+                            />
+                        </GenericTag>
+                        <GenericTag
+                            text="{i18n>WarningCount}"
+                            status="Warning"
+                            design="StatusIconHidden"
+                            id="idWarningCountTag"
+                        >
+                            <ObjectNumber
+                                number="{statusModel>/numberOfWarning}"
+                                unit="{i18n>TaskUnit}"
+                                emphasized="false"
+                            />
+                        </GenericTag>
+                        <GenericTag
+                            text="{i18n>SuccessCount}"
+                            status="Success"
+                            design="StatusIconHidden"
+                            id="idSuccessCountTag"
+                        >
+                            <ObjectNumber
+                                number="{statusModel>/numberOfSuccess}"
+                                unit="{i18n>TaskUnit}"
+                                emphasized="false"
+                            />
+                        </GenericTag>
+                    </OverflowToolbar>
+                </f:content>
+            </f:DynamicPageTitle>
+        </f:title>
+        <!-- DynamicPage Header -->
+        <f:header>
+            <f:DynamicPageHeader pinnable="true">
+                <HBox
+                    class="sapUiTinyMarginTop"
+                    justifyContent="SpaceBetween"
+                >
+                    <VBox
+                        class="sapUiTinyMarginTop"
+                        width="48%"
+                    >
+                        <Label text="{i18n>SYSID}" />
+                        <Input
+                            id="IdSysidInput"
+                            class="taskInputClass"
+                            placeholder="{i18n>TicketInputPlaceholder}"
+                        />
+                    </VBox>
+                    <VBox
+                        class="sapUiTinyMarginTop"
+                        width="48%"
+                    >
+                        <Label text="{i18n>BUKRS}" />
+                        <Input
+                            id="IdBukrsInput"
+                            class="taskInputClass"
+                            placeholder="{i18n>TicketInputPlaceholder}"
+                        />
+                    </VBox>
+                </HBox>
+                <HBox
+                    class="sapUiTinyMarginTop"
+                    justifyContent="SpaceBetween"
+                >
+                    <VBox
+                        class="sapUiTinyMarginTop"
+                        width="48%"
+                    >
+                        <Label text="{i18n>TCODE}" />
+                        <Input
+                            id="IdTcodeInput"
+                            class="taskInputClass"
+                            placeholder="{i18n>TicketInputPlaceholder}"
+                        />
+                    </VBox>
+                    <VBox
+                        class="sapUiTinyMarginTop"
+                        width="48%"
+                    >
+                        <Label text="{i18n>DATUM}" />
+
+                        <DatePicker
+                            width="100%"
+                            id="IdDatumInput"
+                            placeholder="{i18n>EnterDate}"
+                        />
+                    </VBox>
+                </HBox>
+                <HBox
+                    class="sapUiTinyMarginTop"
+                    justifyContent="SpaceBetween"
+                >
+                    <VBox
+                        class="sapUiTinyMarginTop"
+                        width="48%"
+                    >
+                        <Label text="{i18n>UNAME}" />
+                        <Input
+                            id="IdUnameInput"
+                            class="taskInputClass"
+                            placeholder="{i18n>TicketInputPlaceholder}"
+                        />
+                    </VBox>
+                    <VBox
+                        class="sapUiTinyMarginTop"
+                        width="48%"
+                    >
+                        <Label text="{i18n>STATUS}" />
+                        <Input
+                            id="IdStatusInput"
+                            class="taskInputClass"
+                            placeholder="{i18n>TicketInputPlaceholder}"
+                        />
+                    </VBox>
+                </HBox>
+                <HBox
+                    class="sapUiTinyMarginTop"
+                    justifyContent="SpaceBetween"
+                >
+                    <VBox
+                        class="sapUiTinyMarginTop"
+                        width="48%"
+                    >
+                        <Label text="{i18n>INFO}" />
+                        <Input
+                            id="IdInfoInput"
+                            class="taskInputClass"
+                            placeholder="{i18n>TicketInputPlaceholder}"
+                        />
+                    </VBox>
+                </HBox>
+                <HBox
+                    class="sapUiTinyMarginTop"
+                    justifyContent="SpaceBetween"
+                >
+                    <VBox>
+                        <Button
+                            id="idSearchBtn"
+                            text="{i18n>Search}"
+                            press="onSearch"
+                        />
+                    </VBox>
+                </HBox>
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+            <!-- InfoLabel component into table row -->
+            <Table
+                id="idTaskTable"
+                sticky="HeaderToolbar,ColumnHeaders"
+                inset="false"
+                class="sapFDynamicPageAlignContent"
+                width="auto"
+                items="{resultModel>/}"
+                autoPopinMode="true"
+                noDataText="{i18n>NotFound}"
+            >
+                <columns>
+                    <Column hAlign="Center">
+                        <header>
+                            <Text text="{i18n>GUID}" />
+                        </header>
+                    </Column>
+                    <Column hAlign="Center">
+                        <header>
+                            <Text text="{i18n>SYSID}" />
+                        </header>
+                    </Column>
+                    <Column hAlign="Center">
+                        <header>
+                            <Text text="{i18n>BUKRS}" />
+                        </header>
+                    </Column>
+                    <Column hAlign="Center">
+                        <header>
+                            <Text text="{i18n>TCODE}" />
+                        </header>
+                    </Column>
+                    <Column hAlign="Center">
+                        <header>
+                            <Text text="{i18n>Z_ID_NAME}" />
+                        </header>
+                    </Column>
+                    <Column hAlign="Center">
+                        <header>
+                            <Text text="{i18n>Z_ID}" />
+                        </header>
+                    </Column>
+                    <Column hAlign="Center">
+                        <header>
+                            <Text text="{i18n>DATUM}" />
+                        </header>
+                    </Column>
+                    <Column hAlign="Center">
+                        <header>
+                            <Text text="{i18n>UZEIT}" />
+                        </header>
+                    </Column>
+                    <Column hAlign="Center">
+                        <header>
+                            <Text text="{i18n>UNAME}" />
+                        </header>
+                    </Column>
+                    <Column hAlign="Center">
+                        <header>
+                            <Text text="{i18n>STATUS}" />
+                        </header>
+                    </Column>
+                    <Column hAlign="Center">
+                        <header>
+                            <Text text="{i18n>Info}" />
+                        </header>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <Text text="{resultModel>Guid}" />
+                        <Text text="{resultModel>Sysid}" />
+                        <Text text="{resultModel>Bukrs}" />
+                        <Text text="{resultModel>Tcode}" />
+                        <Text text="{resultModel>Z_Id_Name}" />
+                        <Text text="{resultModel>Z_Id}" />
+                        <Text text="{ path:'resultModel>Datum', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'short', source: { pattern: 'yyy/MM/dd' }} }" />
+                        <Text text="{ path:'resultModel>Uzeit' }" />
+                        <Text text="{resultModel>Uname}" />
+                        <c:Icon src="{= ${resultModel>Status} === 'SUCCESS' ? 'sap-icon://lightbulb' : 'sap-icon://lightbulb'}"
+                                color="{= ${resultModel>Status} === 'SUCCESS' ? 'Positive' : 'Negative'}"
+                        />
+                        <Text text="{resultModel>Info}" />
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>
