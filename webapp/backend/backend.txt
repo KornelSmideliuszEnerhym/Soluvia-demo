@@ -1,0 +1,105 @@
+  METHOD monitoringset_get_entityset.
+    DATA: lv_sysid  TYPE sysid,
+          lv_bukrs  TYPE bukrs,
+          lv_tcode  TYPE tcode,
+          lv_datum  TYPE date,
+          lv_datum2  TYPE date,
+          lv_date   TYPE dats,
+          lv_uname  TYPE uname,
+          lv_status TYPE char20,
+          lv_info   TYPE char100.
+
+    lv_sysid = '%'.
+    lv_bukrs = '%'.
+    lv_tcode = '%'.
+    lv_datum = '%'.
+    lv_uname = '%'.
+    lv_status = '%'.
+    lv_info = '%'.
+
+* read the values from the frontend
+    READ TABLE it_filter_select_options ASSIGNING FIELD-SYMBOL(<ls_sysid>) WITH KEY property = 'Sysid'.
+    IF sy-subrc = 0.
+      READ TABLE <ls_sysid>-select_options ASSIGNING FIELD-SYMBOL(<ls_sysid_line>) INDEX 1.
+      IF sy-subrc = 0.
+        lv_sysid = COND #( WHEN <ls_sysid_line>-low IS INITIAL
+                           THEN '%'
+                           ELSE <ls_sysid_line>-low ).
+      ENDIF.
+    ENDIF.
+
+    READ TABLE it_filter_select_options ASSIGNING FIELD-SYMBOL(<ls_bukrs>) WITH KEY property = 'Bukrs'.
+    IF sy-subrc = 0.
+      READ TABLE <ls_bukrs>-select_options ASSIGNING FIELD-SYMBOL(<ls_bukrs_line>) INDEX 1.
+      IF sy-subrc = 0.
+        lv_bukrs = COND #( WHEN <ls_bukrs_line>-low IS INITIAL
+                           THEN '%'
+                           ELSE <ls_bukrs_line>-low ).
+      ENDIF.
+    ENDIF.
+
+    READ TABLE it_filter_select_options ASSIGNING FIELD-SYMBOL(<ls_tcode>) WITH KEY property = 'Tcode'.
+    IF sy-subrc = 0.
+      READ TABLE <ls_tcode>-select_options ASSIGNING FIELD-SYMBOL(<ls_tcode_line>) INDEX 1.
+      IF sy-subrc = 0.
+        lv_tcode = COND #( WHEN <ls_tcode_line>-low IS INITIAL
+                           THEN '%'
+                           ELSE <ls_tcode_line>-low ).
+      ENDIF.
+    ENDIF.
+
+    READ TABLE it_filter_select_options ASSIGNING FIELD-SYMBOL(<ls_datum>) WITH KEY property = 'Datum'.
+    IF sy-subrc = 0.
+      READ TABLE <ls_datum>-select_options ASSIGNING FIELD-SYMBOL(<ls_datum_line>) INDEX 1.
+      IF sy-subrc = 0.
+        lv_datum = COND #( WHEN <ls_datum_line>-low IS INITIAL
+                           THEN '%'
+                           ELSE <ls_datum_line>-low ).
+      ENDIF.
+    ENDIF.
+
+    READ TABLE it_filter_select_options ASSIGNING FIELD-SYMBOL(<ls_uname>) WITH KEY property = 'Uname'.
+    IF sy-subrc = 0.
+      READ TABLE <ls_uname>-select_options ASSIGNING FIELD-SYMBOL(<ls_uname_line>) INDEX 1.
+      IF sy-subrc = 0.
+        lv_uname = COND #( WHEN <ls_uname_line>-low IS INITIAL
+                           THEN '%'
+                           ELSE <ls_uname_line>-low ).
+      ENDIF.
+    ENDIF.
+
+    READ TABLE it_filter_select_options ASSIGNING FIELD-SYMBOL(<ls_status>) WITH KEY property = 'Status'.
+    IF sy-subrc = 0.
+      READ TABLE <ls_status>-select_options ASSIGNING FIELD-SYMBOL(<ls_status_line>) INDEX 1.
+      IF sy-subrc = 0.
+        lv_status = COND #( WHEN <ls_status_line>-low IS INITIAL
+                            THEN '%'
+                            ELSE <ls_status_line>-low ).
+      ENDIF.
+    ENDIF.
+
+    READ TABLE it_filter_select_options ASSIGNING FIELD-SYMBOL(<ls_info>) WITH KEY property = 'Info'.
+    IF sy-subrc = 0.
+      READ TABLE <ls_info>-select_options ASSIGNING FIELD-SYMBOL(<ls_info_line>) INDEX 1.
+      IF sy-subrc = 0.
+        lv_info   = COND #( WHEN <ls_info_line>-low IS INITIAL
+                            THEN '%'
+                            ELSE <ls_info_line>-low ).
+      ENDIF.
+    ENDIF.
+
+   " CONCATENATE lv_datum+6(2) lv_datum+4(2) lv_datum(4) INTO lv_datum2.
+    IF lv_datum EQ '11111110'.
+      lv_datum = '%'.
+    ENDIF.
+
+    SELECT * FROM ztmonitoring_tab
+             INTO CORRESPONDING FIELDS OF TABLE et_entityset
+             WHERE sysid  LIKE lv_sysid
+               AND bukrs  LIKE lv_bukrs
+               AND tcode  LIKE lv_tcode
+               AND datum  LIKE lv_datum
+               AND uname  LIKE lv_uname
+               AND status LIKE lv_status
+               AND info   LIKE lv_info.
+  ENDMETHOD.
