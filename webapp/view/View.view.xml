@@ -15,9 +15,9 @@
         <!-- DynamicPage Title -->
         <f:title>
             <f:DynamicPageTitle>
-                <f:heading>
-                    <Title text="{i18n>userTasksTileTitle}" />
-                </f:heading>
+                <f:content>
+                    <Title text="{i18n>userTasksTileTitle}"/>
+                </f:content>
                 <f:content>
                     <OverflowToolbar>
                         <!-- Waiting -->
@@ -29,7 +29,17 @@
                         >
                             <ObjectNumber
                                 number="{statusModel>/numberOfLines}"
-                                unit="{i18n>TaskUnit}"
+                                emphasized="false"
+                            />
+                        </GenericTag>
+                        <GenericTag
+                            text="{i18n>ErrorCount}"
+                            status="Error"
+                            design="StatusIconHidden"
+                            id="idErrorTag"
+                        >
+                            <ObjectNumber
+                                number="{statusModel>/numberOfError}"
                                 emphasized="false"
                             />
                         </GenericTag>
@@ -41,7 +51,6 @@
                         >
                             <ObjectNumber
                                 number="{statusModel>/numberOfWarning}"
-                                unit="{i18n>TaskUnit}"
                                 emphasized="false"
                             />
                         </GenericTag>
@@ -53,10 +62,39 @@
                         >
                             <ObjectNumber
                                 number="{statusModel>/numberOfSuccess}"
-                                unit="{i18n>TaskUnit}"
                                 emphasized="false"
                             />
                         </GenericTag>
+                    </OverflowToolbar>
+                    <OverflowToolbar>
+                        <VariantManagement
+                            id="IdVariantManagement"
+                            select="onSelectVariant"
+                            showFooter="false"
+                            popoverTitle="Variants list"
+                            selectedKey="0"
+                        >
+                            <items>
+                                <VariantItem
+                                    key="0"
+                                    title="Default"
+                                    rename="false"
+                                    sharing="Public"
+                                />
+                                <VariantItem
+                                    key="1"
+                                    title="Variant 1"
+                                    rename="false"
+                                    sharing="Public"
+                                />
+                                <VariantItem
+                                    key="2"
+                                    title="Variant 2"
+                                    rename="false"
+                                    sharing="Public"
+                                />
+                            </items>
+                        </VariantManagement>
                     </OverflowToolbar>
                 </f:content>
             </f:DynamicPageTitle>
@@ -138,9 +176,9 @@
                         class="sapUiTinyMarginTop"
                         width="48%"
                     >
-                        <Label text="{i18n>STATUS}" />
+                        <Label text="{i18n>INFO}" />
                         <Input
-                            id="IdStatusInput"
+                            id="IdInfoInput"
                             class="taskInputClass"
                             placeholder="{i18n>TicketInputPlaceholder}"
                         />
@@ -154,23 +192,34 @@
                         class="sapUiTinyMarginTop"
                         width="48%"
                     >
-                        <Label text="{i18n>INFO}" />
-                        <Input
-                            id="IdInfoInput"
-                            class="taskInputClass"
-                            placeholder="{i18n>TicketInputPlaceholder}"
-                        />
-                    </VBox>
-                </HBox>
-                <HBox
-                    class="sapUiTinyMarginTop"
-                    justifyContent="SpaceBetween"
-                >
-                    <VBox>
                         <Button
                             id="idSearchBtn"
                             text="{i18n>Search}"
                             press="onSearch"
+                        />
+                    </VBox>
+                    <VBox
+                        class="sapUiTinyMarginTop"
+                        width="48%"
+                        direction="Row"
+                    >
+                        <CheckBox
+                            text="{i18n>Error}"
+                            valueState="Error"
+                            id="IdErrorCheckBox"
+                            selected="true"
+                        />
+                        <CheckBox
+                            text="{i18n>Warning}"
+                            valueState="Warning"
+                            id="IdWarningCheckBox"
+                            selected="false"
+                        />
+                        <CheckBox
+                            text="{i18n>Success}"
+                            valueState="Success"
+                            id="IdSuccessCheckBox"
+                            selected="false"
                         />
                     </VBox>
                 </HBox>
@@ -191,11 +240,6 @@
                 <columns>
                     <Column hAlign="Center">
                         <header>
-                            <Text text="{i18n>GUID}" />
-                        </header>
-                    </Column>
-                    <Column hAlign="Center">
-                        <header>
                             <Text text="{i18n>SYSID}" />
                         </header>
                     </Column>
@@ -207,11 +251,6 @@
                     <Column hAlign="Center">
                         <header>
                             <Text text="{i18n>TCODE}" />
-                        </header>
-                    </Column>
-                    <Column hAlign="Center">
-                        <header>
-                            <Text text="{i18n>Z_ID_NAME}" />
                         </header>
                     </Column>
                     <Column hAlign="Center">
@@ -247,19 +286,26 @@
                 </columns>
                 <items>
                     <ColumnListItem>
-                        <Text text="{resultModel>Guid}" />
-                        <Text text="{resultModel>Sysid}" />
-                        <Text text="{resultModel>Bukrs}" />
-                        <Text text="{resultModel>Tcode}" />
-                        <Text text="{resultModel>Z_Id_Name}" />
-                        <Text text="{resultModel>Z_Id}" />
-                        <Text text="{ path:'resultModel>Datum', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'short', source: { pattern: 'yyy/MM/dd' }} }" />
-                        <Text text="{ path:'resultModel>Uzeit' }" />
-                        <Text text="{resultModel>Uname}" />
-                        <c:Icon src="{= ${resultModel>Status} === 'SUCCESS' ? 'sap-icon://lightbulb' : 'sap-icon://lightbulb'}"
-                                color="{= ${resultModel>Status} === 'SUCCESS' ? 'Positive' : 'Negative'}"
+                        <ObjectIdentifier text="{resultModel>Sysid}" />
+                        <ObjectIdentifier text="{resultModel>Bukrs}" />
+                        <ObjectIdentifier text="{resultModel>Tcode}" />
+                        <ObjectIdentifier text="{resultModel>Z_Id}" />
+                        <ObjectIdentifier
+                            text="{ path: 'resultModel>Datum', formatter: '.formatDate' }"
                         />
-                        <Text text="{resultModel>Info}" />
+                        <ObjectIdentifier
+                            text="{ path: 'resultModel>Uzeit', formatter: '.formatTime' }"
+                        />
+                        <ObjectIdentifier text="{resultModel>Uname}" />
+                        <c:Icon
+                            src="{= ${resultModel>Status} === 'SUCCESS' ? 'sap-icon://lightbulb' : 
+                                    ${resultModel>Status} === 'WARNING' ? 'sap-icon://lightbulb' :
+                                    ${resultModel>Status} === 'ERROR'   ? 'sap-icon://lightbulb' : 'sap-icon://lightbulb' }"
+                            color="{= ${resultModel>Status} === 'SUCCESS' ? 'Positive' :
+                                      ${resultModel>Status} === 'WARNING' ? 'Critical' : 
+                                      ${resultModel>Status} === 'ERROR'   ? 'Negative' : 'Neutral' }"
+                        />
+                        <ObjectIdentifier text="{resultModel>Info}" />
                     </ColumnListItem>
                 </items>
             </Table>
