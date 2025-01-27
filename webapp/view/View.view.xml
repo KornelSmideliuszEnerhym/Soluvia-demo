@@ -291,7 +291,7 @@
                         <ObjectIdentifier text="{resultModel>Tcode}" />
                         <ObjectIdentifier text="{resultModel>Z_Id}" />
                         <ObjectIdentifier
-                            text="{ path: 'resultModel>Datum', formatter: '.formatDate' }"
+                            text="{ path: 'resultModel>Datum', formatter: '.formatDate'}"
                         />
                         <ObjectIdentifier
                             text="{ path: 'resultModel>Uzeit', formatter: '.formatTime' }"
@@ -302,7 +302,7 @@
                                     ${resultModel>Status} === 'WARNING' ? 'sap-icon://lightbulb' :
                                     ${resultModel>Status} === 'ERROR'   ? 'sap-icon://lightbulb' : 'sap-icon://lightbulb' }"
                             color="{= ${resultModel>Status} === 'SUCCESS' ? 'Positive' :
-                                      ${resultModel>Status} === 'WARNING' ? 'Critical' : 
+                                      ${resultModel>Status} === 'WARNING' ? 'Information' : 
                                       ${resultModel>Status} === 'ERROR'   ? 'Negative' : 'Neutral' }"
                         />
                         <ObjectIdentifier text="{resultModel>Info}" />

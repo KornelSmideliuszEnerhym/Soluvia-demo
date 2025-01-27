@@ -28,10 +28,10 @@ sap.ui.define(
         var params = event.getParameters();
         switch (params.key) {
           case "1":
-            this.getView().byId("IdSysidInput").setValue("HI8");
-            this.getView().byId("IdBukrsInput").setValue("buk1");
+            this.getView().byId("IdSysidInput").setValue("SysID");
+            this.getView().byId("IdBukrsInput").setValue("Bukcode");
             this.getView().byId("IdTcodeInput").setValue("SE11");
-            this.getView().byId("IdDatumInput").setValue("");
+            this.getView().byId("IdDatumInput").setValue("11.01.2021");
             this.getView().byId("IdUnameInput").setValue("test-user");
             this.getView().byId("IdInfoInput").setValue("info");
             this.getView().byId("IdErrorCheckBox").setSelected(false);
@@ -113,6 +113,9 @@ sap.ui.define(
             //Error branch
           },
         });
+      },
+      formatTime: function () {
+
       },
       formatDate: function (oDate) {
         if (!oDate) {
